@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295735120832",
+    "project_id": "ride-share-a9d1c",
+    "storage_bucket": "ride-share-a9d1c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295735120832:android:aab5f0de9ef8be6ed0ee25",
+        "android_client_info": {
+          "package_name": "com.example.ride_share"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF-Tlpe7dRit9hUBM0Uncs_-Rg_ekQgX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
