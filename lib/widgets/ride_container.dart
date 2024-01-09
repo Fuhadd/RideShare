@@ -19,25 +19,32 @@ class RideContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const RideDetailsScreen(),
-          ),
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w),
-        child: Column(
-          children: [
-            const DateTimeContainer(),
-            verticalSpacer(20.h),
-            MapContainer(cameraPosition: cameraPosition),
-            verticalSpacer(25.h),
-            LocationContainer(showTotalSeats: showTotalSeats)
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.w),
+      child: Column(
+        children: [
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const RideDetailsScreen(),
+                  ),
+                );
+              },
+              child: const DateTimeContainer()),
+          verticalSpacer(20.h),
+          const MapContainer(),
+          verticalSpacer(25.h),
+          GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const RideDetailsScreen(),
+                  ),
+                );
+              },
+              child: LocationContainer(showTotalSeats: showTotalSeats))
+        ],
       ),
     );
   }
