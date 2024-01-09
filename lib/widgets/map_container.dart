@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:location/location.dart' as loc;
+import 'package:ride_share/constants/custom_colors.dart';
 import 'package:ride_share/constants/custom_string.dart';
 import 'package:ride_share/screens/app_view_model.dart';
 import 'package:ride_share/utils/google_map_assistant.dart';
 
 class MapContainer extends StatefulHookConsumerWidget {
-  const MapContainer({
-    super.key,
-  });
+  final CameraPosition? cameraPosition;
+  const MapContainer({super.key, this.cameraPosition});
 
   @override
   ConsumerState<MapContainer> createState() => _MapContainerState();
@@ -38,41 +39,48 @@ class _MapContainerState extends ConsumerState<MapContainer> {
 
   @override
   Widget build(BuildContext context) {
-    createCurrentLocationIconMarker();
-    return SizedBox(
+    return Container(
       height: 170.h,
       width: double.infinity,
-      // decoration: const BoxDecoration(color: Colors.red),
+      color: CustomColors.greyTextColor.withOpacity(0.8),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            // myLocationEnabled: true,
-            zoomGesturesEnabled: true,
-            initialCameraPosition: _kdevNodeCameraPosition,
-            polylines: polylineSet,
-            markers: markersSet,
-            circles: circlesSet,
-            onMapCreated: (GoogleMapController controller) {
-              _mapController.complete(controller);
-              newMapController = controller;
-              setState(() {});
-              locateUserPosition();
-            },
-            // onCameraMove: (CameraPosition? position) {
-            //   if (pickLocation != position!.target) {
-            //     setState(() {
-            //       pickLocation = position.target;
-            //     });
-            //   }
-            // },
-            // onCameraIdle: () {
-            //   getAddressFromLatLng();
-            // },
+          Stack(
+            children: [
+              GoogleMap(
+                mapType: MapType.normal,
+                // myLocationEnabled: true,
+                zoomGesturesEnabled: true,
+                initialCameraPosition:
+                    widget.cameraPosition ?? _kdevNodeCameraPosition,
+                polylines: polylineSet,
+                markers: markersSet,
+                circles: circlesSet,
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController.complete(controller);
+                  newMapController = controller;
+                  setState(() {});
+                  if (widget.cameraPosition == null) {
+                    locateUserPosition();
+                  }
+                },
+              ),
+              Visibility(
+                visible: widget.cameraPosition == null ? !showIcon : false,
+                child: Container(
+                  color: CustomColors.blackColor.withOpacity(0.05),
+                  child: Center(
+                      child: SpinKitWave(
+                    color: CustomColors.greyTextColor.withOpacity(0.8),
+                    size: 15.0,
+                  )),
+                ),
+              )
+            ],
           ),
           Visibility(
-            visible: showIcon,
+            visible: widget.cameraPosition == null ? showIcon : true,
             child: Container(
               height: 38.h,
               width: 38.w,
@@ -133,19 +141,11 @@ class _MapContainerState extends ConsumerState<MapContainer> {
       zoom: 16,
     );
 
+    //Caching the camera position for use on the details screen to prevent calling the Apis a second time
+    ref.read(userCameraPositionProvider.notifier).state = cameraPosition;
+
     newMapController!
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-
-    Marker myLocationMarker = Marker(
-      markerId: const MarkerId("originID"),
-      infoWindow: const InfoWindow(
-        title: "My Location",
-        snippet: "Origin",
-      ),
-      position:
-          LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude),
-      icon: currentLocationIcon!,
-    );
 
     humanReadableAddress =
         await GoogleMapAssistants.searchAddressForGeographicCoordinates(
@@ -155,19 +155,6 @@ class _MapContainerState extends ConsumerState<MapContainer> {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
       showIcon = true;
-      // markersSet.add(myLocationMarker);
     });
-  }
-
-  createCurrentLocationIconMarker() {
-    if (currentLocationIcon == null) {
-      ImageConfiguration imageConfiguration =
-          createLocalImageConfiguration(context, size: const Size(200, 200));
-      BitmapDescriptor.fromAssetImage(
-              imageConfiguration, ConstantString.avatarImage)
-          .then((value) {
-        currentLocationIcon = value;
-      });
-    }
   }
 }

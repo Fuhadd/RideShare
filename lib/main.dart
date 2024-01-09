@@ -9,7 +9,7 @@ import 'package:ride_share/style/custom_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: "lift_lynk",
+    name: "ride_share",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const ProviderScope(child: MyApp()));

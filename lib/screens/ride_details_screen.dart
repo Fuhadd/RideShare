@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ride_share/constants/custom_colors.dart';
-import 'package:ride_share/constants/custom_string.dart';
+import 'package:ride_share/screens/app_view_model.dart';
 import 'package:ride_share/utils/spacers.dart';
 import 'package:ride_share/widgets/custom_button.dart';
-import 'package:ride_share/widgets/date_time_container.dart';
-import 'package:ride_share/widgets/location_container.dart';
-import 'package:ride_share/widgets/map_container.dart';
 import 'package:ride_share/widgets/ride_container.dart';
 import 'package:ride_share/widgets/riders_container.dart';
 
-class RideDetailsScreen extends StatefulWidget {
+class RideDetailsScreen extends StatefulHookConsumerWidget {
   const RideDetailsScreen({super.key});
 
   @override
-  State<RideDetailsScreen> createState() => _RideDetailsScreenState();
+  ConsumerState<RideDetailsScreen> createState() => _RideDetailsScreenState();
 }
 
-class _RideDetailsScreenState extends State<RideDetailsScreen> {
+class _RideDetailsScreenState extends ConsumerState<RideDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +47,9 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 verticalSpacer(30.h),
-                const RideContainer(
+                RideContainer(
                   showTotalSeats: true,
+                  cameraPosition: ref.watch(userCameraPositionProvider),
                 ),
                 verticalSpacer(30.h),
                 Divider(

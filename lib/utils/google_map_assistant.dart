@@ -4,6 +4,7 @@ import 'package:ride_share/constants/custom_string.dart';
 import 'package:ride_share/models/directions_model.dart';
 
 class GoogleMapAssistants {
+  //This function below gets the user current location details including address
   static Future<String> searchAddressForGeographicCoordinates(
       Position position, context) async {
     String mapKey = ConstantString.googleMapsAPIKey;
@@ -20,9 +21,6 @@ class GoogleMapAssistants {
       userPickUpAddress.locationLatitude = position.latitude;
       userPickUpAddress.locationLongitude = position.longitude;
       userPickUpAddress.locationName = humanReadableAddress;
-
-      // prov.Provider.of<AppInfo>(context, listen: false)
-      //     .updatePickUpLocationAddress(userPickUpAddress);
     }
 
     return humanReadableAddress;

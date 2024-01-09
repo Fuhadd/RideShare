@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:ride_share/constants/custom_colors.dart';
-import 'package:ride_share/constants/custom_string.dart';
 import 'package:ride_share/utils/spacers.dart';
-import 'package:ride_share/widgets/date_time_container.dart';
-import 'package:ride_share/widgets/location_container.dart';
-import 'package:ride_share/widgets/map_container.dart';
 import 'package:ride_share/widgets/ride_container.dart';
 
 class HomeScreen extends StatefulWidget {
